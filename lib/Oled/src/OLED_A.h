@@ -13,7 +13,7 @@ private:
 
 public:
     OLED_Display();
-    void init();
+    void init(uint8_t sda, uint8_t scl); // Updated to accept SDA and SCL pins
     void clear();
     void update();
     void drawPixel(uint8_t x, uint8_t y, bool color);

@@ -14,8 +14,8 @@ void OLED_Display::sendCommand(uint8_t cmd) {
     Wire.endTransmission();
 }
 
-void OLED_Display::init() {
-    Wire.begin(4, 5);
+void OLED_Display::init(uint8_t sda, uint8_t scl) {
+    Wire.begin(sda, scl); // Use the provided SDA and SCL pins
     Wire.setClock(1000000);
     sendCommand(0xAE);
     sendCommand(0xD5);

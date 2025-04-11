@@ -114,7 +114,7 @@ void TaskRendering(void *pvParameters) {
 }
 void setup() {
   Serial.begin(9600);
-  oled.init();
+  oled.init(4,5);
   oled.clear();
   // oled.drawFromFile("/obraz.txt");
   // oled.drawFillRectangle(31,31-16, 64, 32, 0);
