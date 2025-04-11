@@ -9,6 +9,7 @@ const static float centerY = 31; // Środek ekranu OLED (64 px wysokości)
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
 OLED_Display oled;
+
 void tran(uint8_t arr[][2], size_t size, int dx, int dy) {
   for (size_t i = 0; i < size; i++) {
       arr[i][0] += dx;  // Modyfikacja wartości x (pierwsza kolumna)
@@ -18,6 +19,7 @@ void tran(uint8_t arr[][2], size_t size, int dx, int dy) {
 
 
 void rot(float arr[][2], uint8_t size, float rotz) {
+    const float sx = 63.0f, sy = 31.0f; // Środek obrotu jako stałe
     const float radians = rotz * (M_PI / 180.0f); // Konwersja stopni na radiany
     
     // Obliczenie wartości trygonometrycznych tylko raz
@@ -26,12 +28,12 @@ void rot(float arr[][2], uint8_t size, float rotz) {
 
     for (uint8_t i = 0; i < size; i++) {
         // Przesunięcie względem środka
-        const float dx = arr[i][0] - centerX;
-        const float dy = arr[i][1] - centerY;
+        const float dx = arr[i][0] - sx;
+        const float dy = arr[i][1] - sy;
 
         // Zastosowanie macierzy obrotu
-        arr[i][0] = dx * cosR - dy * sinR + centerX;
-        arr[i][1] = dx * sinR + dy * cosR + centerY;
+        arr[i][0] = dx * cosR - dy * sinR + sx;
+        arr[i][1] = dx * sinR + dy * cosR + sy;
     }
 }
 
@@ -81,8 +83,10 @@ void rot3D(float arr[][3], uint8_t size, float rotx, float roty, float rotz) {
 }
 
 
-void proj(float xyzs[][3], float xys[][2], uint8_t size, float d = 40) {
-    
+void proj(float xyzs[][3], float xys[][2], uint8_t size) {
+    float d = 40;       // Odległość "kamery"
+    float centerX = 63; // Środek ekranu OLED (128 px szerokości)
+    float centerY = 31; // Środek ekranu OLED (64 px wysokości)
 
     for (uint8_t i = 0; i < size; i++) {
         float x = xyzs[i][0];
@@ -93,6 +97,7 @@ void proj(float xyzs[][3], float xys[][2], uint8_t size, float d = 40) {
         xys[i][1] = (y * d) / z + centerY;
     }
 }
+
 // Krawędzie sześcianu
 uint8_t edges[12][2] = {
   {0, 1}, {1, 2}, {2, 3}, {3, 0}, // Dolna podstawa
