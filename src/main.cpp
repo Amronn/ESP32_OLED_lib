@@ -40,38 +40,28 @@ void rot3D(float arr[][3], uint8_t size, float rotx, float roty, float rotz) {
   const float radiansy = roty * (M_PI / 180.0f);
   const float radiansz = rotz * (M_PI / 180.0f);
 
-  // Obliczenie wartości trygonometrycznych tylko raz
   const float cosRx = cosf(radiansx), sinRx = sinf(radiansx);
   const float cosRy = cosf(radiansy), sinRy = sinf(radiansy);
   const float cosRz = cosf(radiansz), sinRz = sinf(radiansz);
 
   for (uint8_t i = 0; i < size; i++) {
-    float x = arr[i][0];
-    float y = arr[i][1];
-    float z = arr[i][2];
+    float x = arr[i][0], y = arr[i][1], z = arr[i][2];
 
-    // Rotacja wokół X
+    // Combined rotation calculations
     if (rotx != 0) {
-      const float newY = y * cosRx - z * sinRx;
-      const float newZ = y * sinRx + z * cosRx;
-      y = newY;
-      z = newZ;
+      const float tempY = y * cosRx - z * sinRx;
+      z = y * sinRx + z * cosRx;
+      y = tempY;
     }
-
-    // Rotacja wokół Y
     if (roty != 0) {
-      const float newX = x * cosRy + z * sinRy;
-      const float newZ = -x * sinRy + z * cosRy;
-      x = newX;
-      z = newZ;
+      const float tempX = x * cosRy + z * sinRy;
+      z = -x * sinRy + z * cosRy;
+      x = tempX;
     }
-
-    // Rotacja wokół Z
     if (rotz != 0) {
-      const float newX = x * cosRz - y * sinRz;
-      const float newY = x * sinRz + y * cosRz;
-      x = newX;
-      y = newY;
+      const float tempX = x * cosRz - y * sinRz;
+      y = x * sinRz + y * cosRz;
+      x = tempX;
     }
 
     arr[i][0] = x;
